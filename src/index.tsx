@@ -113,8 +113,8 @@ const SwipePlayer: React.FC<SwipePlayerProps> = ({
             currentIndex={currentIndex}
             index={index}
             repeat={!goToNext}
-            muted={muted || isMuted}
-            setMuted={setMuted || setIsMuted}
+            muted={muted ?? isMuted}
+            setMuted={setMuted ?? setIsMuted}
             onEnd={handleOnVideoEnd}
             pressableProps={pressableProps}
             {...restVideoPlayerProps}

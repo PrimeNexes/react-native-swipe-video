@@ -10,8 +10,9 @@ export interface SwipeVideoProps
   index: number;
   currentIndex?: number;
   preload?: number;
-  overlay?: React.ReactNode;
-  overlayStyle?: StyleProp<ViewStyle>;
+  soundOnIcon?: React.ReactNode;
+  soundOffIcon?: React.ReactNode;
+  soundOverlayStyle?: StyleProp<ViewStyle>;
   pressableProps?: PressableProps;
   setMuted: (flag: boolean) => void;
 }
@@ -20,8 +21,9 @@ const SwipeVideo: React.FC<SwipeVideoProps> = ({
   videoUrl,
   index,
   currentIndex,
-  overlay,
-  overlayStyle,
+  soundOnIcon,
+  soundOffIcon,
+  soundOverlayStyle,
   setMuted,
   pressableProps,
   ...props
@@ -29,12 +31,52 @@ const SwipeVideo: React.FC<SwipeVideoProps> = ({
   const { paused, muted, style, ...rest } = { ...props };
 
   const [isPaused, setPaused] = React.useState<boolean>(paused || true);
-  const [showOverlay, setShowOverlay] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (currentIndex === index) setPaused(false);
     else setPaused(true);
   }, [currentIndex, index]);
+
+  return (
+    <>
+      <Pressable
+        onPress={() => setMuted(!muted)}
+        onLongPress={() => {
+          setPaused(true);
+        }}
+        onPressOut={() => setPaused(false)}
+        {...pressableProps}
+      >
+        <Video
+          playInBackground={false}
+          playWhenInactive={false}
+          progressUpdateInterval={1000}
+          paused={isPaused}
+          onVideoLoad={() => console.log('onVideoLoad')}
+          muted={muted}
+          source={{ uri: videoUrl }}
+          style={[styles.video, style]}
+          resizeMode="cover"
+          {...rest}
+        />
+      </Pressable>
+      <Overlay
+        muteState={muted || false}
+        style={soundOverlayStyle}
+        SoundOnIcon={soundOnIcon}
+        SoundOffIcon={soundOffIcon}
+      />
+    </>
+  );
+};
+
+const Overlay: React.FC<{
+  muteState: boolean;
+  style: StyleProp<ViewStyle>;
+  SoundOnIcon?: React.ReactNode;
+  SoundOffIcon?: React.ReactNode;
+}> = ({ muteState, SoundOnIcon, SoundOffIcon, style }) => {
+  const [showOverlay, setShowOverlay] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     setShowOverlay(true);
@@ -42,42 +84,15 @@ const SwipeVideo: React.FC<SwipeVideoProps> = ({
       setShowOverlay(false);
     }, 500);
     return () => clearTimeout(timer);
-  }, [muted]);
+  }, [muteState]);
 
-  return (
-    <Pressable
-      onPress={() => setMuted(!muted)}
-      onLongPress={() => {
-        setPaused(true);
-      }}
-      onPressOut={() => setPaused(false)}
-      {...pressableProps}
-    >
-      <Video
-        playInBackground={false}
-        playWhenInactive={false}
-        progressUpdateInterval={1000}
-        paused={isPaused}
-        onVideoLoad={() => console.log('onVideoLoad')}
-        muted={muted}
-        source={{ uri: videoUrl }}
-        style={[styles.video, style]}
-        resizeMode="cover"
-        {...rest}
-      />
-      <Overlay style={overlayStyle} visible={showOverlay}>
-        {overlay}
-      </Overlay>
-    </Pressable>
-  );
-};
-
-const Overlay: React.FC<{ visible: boolean; style: StyleProp<ViewStyle> }> = ({
-  visible,
-  style,
-  children,
-}) => {
-  if (visible) return <View style={[styles.overlay, style]}>{children}</View>;
+  if (showOverlay) {
+    return (
+      <View style={[styles.overlay, style]}>
+        {muteState ? SoundOffIcon : SoundOnIcon}
+      </View>
+    );
+  }
   return null;
 };
 
@@ -92,6 +107,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     top: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
 });
