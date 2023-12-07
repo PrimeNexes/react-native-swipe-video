@@ -5,12 +5,13 @@ import type {
   PressableProps,
 } from 'react-native';
 import { Dimensions, FlatList, StyleSheet, View } from 'react-native';
-import VideoPlayer, { type VideoPlayerProps } from './VideoPlayer';
+import VideoPlayer, { type SwipeVideoProps } from './VideoPlayer';
 
 /**
  * PlayerProps interface for the Player component.
  */
-interface PlayerProps extends Omit<FlatListProps<any>, 'data' | 'renderItem'> {
+export interface SwipePlayerProps
+  extends Omit<FlatListProps<any>, 'data' | 'renderItem'> {
   /**
    * The number of videos to preload ahead of the current video. Default is 10.
    */
@@ -19,8 +20,8 @@ interface PlayerProps extends Omit<FlatListProps<any>, 'data' | 'renderItem'> {
   /**
    * Additional props to be passed to the VideoPlayer component, excluding 'source' and 'src' props.
    */
-  videoPlayerProps?: Omit<
-    VideoPlayerProps,
+  videoProps?: Omit<
+    SwipeVideoProps,
     'videoUrl' | 'index' | 'currentIndex' | 'setMuted' | 'pressableProps'
   >;
 
@@ -41,12 +42,12 @@ interface PlayerProps extends Omit<FlatListProps<any>, 'data' | 'renderItem'> {
   renderItem?: ListRenderItem<any>;
 }
 
-const Player: React.FC<PlayerProps> = ({
+const SwipePlayer: React.FC<SwipePlayerProps> = ({
   data,
   preload,
   muted,
   goToNext = false,
-  videoPlayerProps,
+  videoProps,
   pressableProps,
   style,
   renderItem,
@@ -57,7 +58,7 @@ const Player: React.FC<PlayerProps> = ({
   const [isMuted, setMuted] = useState<boolean>(muted || false);
   const viewConfigRef = useRef({ viewAreaCoveragePercentThreshold: 70 });
 
-  const { onEnd, ...restVideoPlayerProps } = { ...videoPlayerProps };
+  const { onEnd, ...restVideoPlayerProps } = { ...videoProps };
 
   // Viewable configuration
   const onViewRef = useRef(
@@ -118,11 +119,6 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: 'black',
   },
-  contentContainerStyle: {
-    height: Dimensions.get('window').height,
-    width: Dimensions.get('window').width,
-    backgroundColor: 'black',
-  },
   extraItem: {
     position: 'absolute',
     bottom: 0,
@@ -132,4 +128,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Player;
+export default SwipePlayer;

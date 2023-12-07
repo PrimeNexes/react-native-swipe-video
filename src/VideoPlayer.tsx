@@ -4,7 +4,7 @@ import { Dimensions, Pressable, StyleSheet, View } from 'react-native';
 import type { VideoProperties } from 'react-native-video';
 import Video from 'react-native-video';
 
-export interface VideoPlayerProps
+export interface SwipeVideoProps
   extends Omit<VideoProperties, 'source' | 'src'> {
   videoUrl: string;
   index: number;
@@ -16,7 +16,7 @@ export interface VideoPlayerProps
   setMuted: (flag: boolean) => void;
 }
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({
+const SwipeVideo: React.FC<SwipeVideoProps> = ({
   videoUrl,
   index,
   currentIndex,
@@ -96,4 +96,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default VideoPlayer;
+export default SwipeVideo;

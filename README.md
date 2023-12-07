@@ -8,10 +8,14 @@ Swipe based video player for react native
 npm install react-native-swipe-video
 ```
 
+```sh
+yarn add react-native-swipe-video
+```
+
 ## Usage
 
 ```js
-import { multiply } from 'react-native-swipe-video';
+import SwipeVideo from 'react-native-swipe-video';
 
 // ...
 

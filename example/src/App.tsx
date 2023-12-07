@@ -1,12 +1,12 @@
 import * as React from 'react';
 
 import { SafeAreaView } from 'react-native';
-import Player from 'react-native-swipe-video';
+import SwipeVideo from 'react-native-swipe-video';
 
 export default function App() {
   return (
     <SafeAreaView>
-      <Player
+      <SwipeVideo
         data={[
           {
             videoUrl:
