@@ -73,6 +73,10 @@
     "release-it": "^15.0.0",
     "typescript": "^5.0.2"
   },
+  "dependencies": {
+    "@types/react-native-video": "^5.0.18",
+    "react-native-video": "^5.2.1"
+  },
   "resolutions": {
     "@types/react": "17.0.21"
   },
