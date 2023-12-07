@@ -8,7 +8,7 @@ import { Dimensions, FlatList, StyleSheet, View } from 'react-native';
 import VideoPlayer, { type SwipeVideoProps } from './VideoPlayer';
 
 /**
- * PlayerProps interface for the Player component.
+ * Props for the SwipePlayer component.
  */
 export interface SwipePlayerProps
   extends Omit<FlatListProps<any>, 'data' | 'renderItem'> {
@@ -25,6 +25,9 @@ export interface SwipePlayerProps
     'videoUrl' | 'index' | 'currentIndex' | 'setMuted' | 'pressableProps'
   >;
 
+  /**
+   * Props for the Pressable component.
+   */
   pressableProps?: PressableProps;
 
   /**
@@ -33,12 +36,24 @@ export interface SwipePlayerProps
   muted?: boolean;
 
   /**
+   * Function to set the muted state of the video player.
+   * @param flag - Flag indicating whether the video should be muted.
+   */
+  setMuted?: (flag: boolean) => void;
+
+  /**
    * Determines whether the player should automatically scroll to the next video when the current video ends. Default is the video repeats.
    */
   goToNext?: boolean;
 
+  /**
+   * Array of video data objects.
+   */
   data: { videoUrl: string; extraData?: any }[];
 
+  /**
+   * Function to render each item in the list.
+   */
   renderItem?: ListRenderItem<any>;
 }
 
@@ -46,6 +61,7 @@ const SwipePlayer: React.FC<SwipePlayerProps> = ({
   data,
   preload,
   muted,
+  setMuted,
   goToNext = false,
   videoProps,
   pressableProps,
@@ -55,7 +71,7 @@ const SwipePlayer: React.FC<SwipePlayerProps> = ({
 }) => {
   const flatListRef = React.useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [isMuted, setMuted] = useState<boolean>(muted || false);
+  const [isMuted, setIsMuted] = useState<boolean>(muted || false);
   const viewConfigRef = useRef({ viewAreaCoveragePercentThreshold: 70 });
 
   const { onEnd, ...restVideoPlayerProps } = { ...videoProps };
@@ -97,8 +113,8 @@ const SwipePlayer: React.FC<SwipePlayerProps> = ({
             currentIndex={currentIndex}
             index={index}
             repeat={!goToNext}
-            muted={isMuted}
-            setMuted={setMuted}
+            muted={muted || isMuted}
+            setMuted={setMuted || setIsMuted}
             onEnd={handleOnVideoEnd}
             pressableProps={pressableProps}
             {...restVideoPlayerProps}
