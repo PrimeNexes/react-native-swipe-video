@@ -14,6 +14,7 @@ export interface SwipeVideoProps
   soundOffIcon?: React.ReactNode;
   soundOverlayStyle?: StyleProp<ViewStyle>;
   pressableProps?: PressableProps;
+  autoPlay?: boolean;
   setMuted: (flag: boolean) => void;
 }
 
@@ -26,16 +27,19 @@ const SwipeVideo: React.FC<SwipeVideoProps> = ({
   soundOverlayStyle,
   setMuted,
   pressableProps,
+  autoPlay = true,
   ...props
 }) => {
   const { paused, muted, style, ...rest } = { ...props };
 
-  const [isPaused, setPaused] = React.useState<boolean>(paused || true);
+  const [isPaused, setPaused] = React.useState<boolean>(paused ?? true);
 
   React.useEffect(() => {
-    if (currentIndex === index) setPaused(false);
-    else setPaused(true);
-  }, [currentIndex, index]);
+    if (autoPlay) {
+      if (currentIndex === index) setPaused(false);
+      else setPaused(true);
+    }
+  }, [currentIndex, index, autoPlay]);
 
   return (
     <>

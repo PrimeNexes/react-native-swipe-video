@@ -41,6 +41,8 @@ export interface SwipePlayerProps
    */
   setMuted?: (flag: boolean) => void;
 
+  autoPlay?: boolean;
+
   /**
    * Determines whether the player should automatically scroll to the next video when the current video ends. Default is the video repeats.
    */
@@ -65,6 +67,7 @@ const SwipePlayer: React.FC<SwipePlayerProps> = ({
   goToNext = false,
   videoProps,
   pressableProps,
+  autoPlay,
   style,
   renderItem,
   ...props
@@ -113,6 +116,7 @@ const SwipePlayer: React.FC<SwipePlayerProps> = ({
             currentIndex={currentIndex}
             index={index}
             repeat={!goToNext}
+            autoPlay={autoPlay}
             muted={muted ?? isMuted}
             setMuted={setMuted ?? setIsMuted}
             onEnd={handleOnVideoEnd}
