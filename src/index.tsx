@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import type { FlatListProps } from 'react-native';
 import { Dimensions, FlatList, StyleSheet } from 'react-native';
+import { ReactVideoProps } from 'react-native-video';
 import VideoPlayer, { type SwipeVideoProps } from './SwipeVideo';
 
 /**
@@ -21,7 +22,7 @@ export interface SwipePlayerProps
   /**
    * Array of video data objects.
    */
-  data: { source: SwipeVideoProps['source']; component?: React.ReactNode }[];
+  data: { source: ReactVideoProps['source']; component?: React.ReactNode }[];
 }
 
 const SwipePlayer = React.forwardRef<FlatList, SwipePlayerProps>(
@@ -40,9 +41,9 @@ const SwipePlayer = React.forwardRef<FlatList, SwipePlayerProps>(
         maxToRenderPerBatch={preload}
         viewabilityConfig={viewConfigRef.current}
         initialNumToRender={1}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <>
-            <VideoPlayer source={item} {...videoProps} />
+            <VideoPlayer key={`${index}-video`} source={item} {...videoProps} />
             {item.component}
           </>
         )}
