@@ -1,6 +1,6 @@
 {
   "name": "react-native-swipe-video",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Swipe based video player for react native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
