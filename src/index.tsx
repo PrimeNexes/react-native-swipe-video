@@ -21,7 +21,7 @@ export interface SwipePlayerProps
   /**
    * Array of video data objects.
    */
-  data: { source: SwipeVideoProps['source']; component: React.ReactNode }[];
+  data: { source: SwipeVideoProps['source']; component?: React.ReactNode }[];
 }
 
 const SwipePlayer = React.forwardRef<FlatList, SwipePlayerProps>(
